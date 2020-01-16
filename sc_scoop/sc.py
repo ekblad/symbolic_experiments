@@ -123,7 +123,7 @@ def data_(string_,rand_seed):
 
 	return input_list, output_list, stand(samples), values, stand(test_samples), test_values 
 
-input_list, output_list, samples, values, test_samples, test_values  = data_('../sym_data_4.csv',rand_seed=rand_seed)
+input_list, output_list, samples, values, test_samples, test_values  = data_('../../sym_data_4.csv',rand_seed=rand_seed)
 
 def protectedDiv(left, right):
 	with np.errstate(divide='ignore',invalid='ignore'):
