@@ -41,4 +41,10 @@ Optional*(for immediate plotting of results):
 `pygraphviz                1.3`  
 `cartopy                   0.17.0`  
 
+## Other data:
 
+The code that extracts the IWFM water pumping and delivery estimates from C2VSim can be found [here](https://github.com/giorgk/C2Vsim_FG_v2/tree/master/NSF_Liam).  
+
+The code that extracts the land use data from the California Pesticide Use Reports can be found [here](https://github.com/nataliemall/crop_acreages_from_DPR_reports).  
+
+The code that extracts the economic data from the California County Commissioner Reports can be found [here]().  
