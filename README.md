@@ -3,7 +3,7 @@ Repository for symbolic regression/classification experiments. The experiment fi
 
 ## Running locally -
 
-Download data set from here:  
+Download data set from here: [Google Drive link](https://drive.google.com/file/d/1no0n1hRs1ghTh7eG39hkUMV0q6O22FKx/view?usp=sharing)
 
 Code will look for this file (`'sym_data_4.csv'`) alongside repository (in same directory that `symbolic_experiments` is in).
 
