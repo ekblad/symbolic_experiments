@@ -20,11 +20,13 @@ Required:
 `deap                     1.2.2`  
 `scoop                     0.7.1.1`(as written, can be modified to run single processor)  
 
-Optional (for immediate plotting of results):  
+Optional (for immediate plotting of results) [^1]:  
 `matplotlib                3.1.0`  
 `pygraphviz                1.3`  
 `scikit-learn              0.20.2` 
- 
+
+[^1]: Remote installations of python may not have plotting, so can turn these off in `sr.py` and `sc.py`. All results are stored in a pickle within a directory labeled with the trial number.
+
  ### For sensitivity testing, clustering, and most figures:  
 `salib                     1.3.8`  
 `scikit-learn              0.20.2`  
@@ -35,4 +37,4 @@ Optional (for immediate plotting of results):
 `pygraphviz                1.3`  
 `cartopy                   0.17.0`  
 
-Remote installations of python may not have plotting, so can turn these off in `sr.py` and `sc.py`. All results are stored in a pickle within a directory labeled with the trial number.
+
