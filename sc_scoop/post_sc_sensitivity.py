@@ -51,7 +51,7 @@ def main():
 			input_list = chunk.columns.tolist()[:-8]
 			return input_list
 
-	input_list = labels('../sym_data_4.csv')
+	input_list = labels('../../sym_data_4.csv')
 
 	def protectedDiv(left, right):
 		with np.errstate(divide='ignore',invalid='ignore'):
@@ -151,8 +151,10 @@ if __name__ == "__main__":
 	toolbox = main()
 	funcs = ['lt','ite','vadd','vsub','vmul','vdiv','vneg','vsin','vcos']
 	trial = np.arange(0,21)
+	num_samples = 1000 # number of samples per input to a tree
+	# each model will be evaluated (num_samples*num_unique_model_inputs) times
 
-	sym_data = pd.read_csv('../sym_data_4.csv',header=0,index_col=None,low_memory=False)
+	sym_data = pd.read_csv('../../sym_data_4.csv',header=0,index_col=None,low_memory=False)
 
 	results = {}
 
@@ -213,7 +215,7 @@ if __name__ == "__main__":
 						'bounds': [[np.min(sym_data[col].values),np.max(sym_data[col].values)] for col in model_inputs]
 						}
 
-			param_values = saltelli.sample(problem,1000*len(model_inputs))
+			param_values = saltelli.sample(problem,num_samples*len(model_inputs))
 			# print(param_values.shape)
 
 			dat_local = sym_data[input_list].iloc[0:param_values.shape[0]]

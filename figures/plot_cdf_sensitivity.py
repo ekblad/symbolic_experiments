@@ -1,0 +1,192 @@
+
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib import rcParams, cycler, colors
+params = {
+			# 'text.latex.preamble': ['\\usepackage{gensymb}'],
+			# 'text.usetex': True,
+			'font.family': 'Helvetica',
+			}
+rcParams.update(params)
+from matplotlib.lines import Line2D
+
+sns.set_context("paper", font_scale=2.0, rc={"lines.linewidth": 10})
+sns.set_style('whitegrid')
+sns.set_palette("cividis")
+
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+data = pd.read_csv('model_sensitivities.csv',header=0,index_col=0) # ,low_memory=False)
+data = data.dropna()
+
+plots = {'category':'Category',
+		'neighborhood':'Neighborhood',
+		'lag':'Lag'
+		} # three in total
+orders = {'category':['land_tree','land_non','water_pump','water_deliv','econ_tree','econ_non'],
+		'neighborhood':['home','neighbor_1','neighbor_2','neighbor_3','neighbor_4','neighbor_5'],
+		'lag':['present','lag1','lag2','lag3','lag4','lag5','lag6'],
+		# 'cluster':[0,1,2,3,4],
+		# 'color':['midnightblue','Red']
+		}
+
+def translate(item):
+	if item == 'land_tree':
+		return 'Tree Acreage'
+	if item == 'land_non':
+		return 'Non-Tree Acreage'
+	if item == 'water_pump':
+		return 'Water Pumping'
+	if item == 'water_deliv':
+		return 'Water Deliveries'
+	if item == 'econ_tree':
+		return 'Tree Prices/Values'
+	if item == 'econ_non':
+		return 'Non-Tree Prices/Values'
+	if item == 'home':
+		return 'Current Plot Data'
+	if item == 'neighbor_1':
+		return 'Neighbor 1 Data'
+	if item == 'neighbor_2':
+		return 'Neighbor 2 Data'
+	if item == 'neighbor_3':
+		return 'Neighbor 3 Data'
+	if item == 'neighbor_4':
+		return 'Neighbor 4 Data'
+	if item == 'neighbor_5':
+		return 'Neighbor 5 Data'
+	if item == 'present':
+		return 'Present Data'
+	if item == 'lag1':
+		return "Previous Year's Data"
+	if item == 'lag2':
+		return 'Two Years Previous'
+	if item == 'lag3':
+		return 'Three Years Previous'
+	if item == 'lag4':
+		return 'Four Years Previous'
+	if item == 'lag5':
+		return 'Five Years Previous'
+	if item == 'lag6':
+		return 'Six Years Previous'
+
+sensitivity = 'ST' # plotting for total sensitivity indices
+data[sensitivity] = [1. if i > 2 else i for i in data[sensitivity].values] # clean outliers
+data = data[data.experiment == 'classification']
+data_base = data[data.cluster == 2]
+data_1 = data[data.cluster == 0]
+data_3 = data[data.cluster == 1]
+datas = [data_base,data_1,data_3]
+col_list = ['Baseline Cluster','Robust Cluster','Overfit Cluster']
+df_store = pd.DataFrame(columns = col_list)
+switch = True
+for order in orders:
+	for ind in orders[order]:
+		nums = []
+		for i,data in enumerate(datas):
+			nums.append(np.mean((data[data[order]==ind][sensitivity].values>0)))
+
+			df_work = pd.DataFrame()
+			df_work['Sensitivity'] = [j for j in data[data[order]==ind][sensitivity].values]# if j > 0 ]
+			df_work['Cluster'] = [col_list[i] for j in df_work['Sensitivity'].values]
+			df_work['Category'] = [translate(ind) for j in df_work['Sensitivity'].values]
+
+			df_bins = pd.DataFrame()
+			df_bins['Bins'] = np.arange(0,1.01,0.01)
+			df_bins['Cluster'] = [col_list[i] for j in df_bins['Bins'].values]
+			df_bins['Category'] = [translate(ind) for j in df_bins['Bins'].values]
+			df_bins['CDF'] = [np.sum(df_work['Sensitivity'].values < j)/len(df_work['Sensitivity'].values) for j in df_bins['Bins'].values]
+			if switch:
+				df_sens = df_work
+				df_cdf = df_bins
+				switch = False
+			else:
+				df_sens = pd.concat([df_sens,df_work])
+				df_cdf = pd.concat([df_cdf,df_bins])
+		df_store.loc[ind] = nums
+
+df_store = df_store.stack()
+df_plot = pd.DataFrame()
+df_plot['Category'] = [translate(i) for i in df_store.index.get_level_values(0)]
+df_plot['Cluster'] = df_store.index.get_level_values(1)
+df_plot['Average Sensitivity'] = df_store.values
+
+idx = pd.IndexSlice
+df_cdf = df_cdf.set_index(['Category','Bins','Cluster']).unstack(level=-1)
+df_cdf.loc[:,idx['CDF','Robust Difference']] = df_cdf.loc[:,idx['CDF','Robust Cluster']] - df_cdf.loc[:,idx['CDF','Baseline Cluster']]
+df_cdf.loc[:,idx['CDF','Overfit Difference']] = df_cdf.loc[:,idx['CDF','Overfit Cluster']] - df_cdf.loc[:,idx['CDF','Baseline Cluster']]
+df_cdf = df_cdf.stack()
+df_cdf['Category'] = df_cdf.index.get_level_values(0)
+df_cdf['Bins'] = df_cdf.index.get_level_values(1)
+df_cdf['Cluster'] = df_cdf.index.get_level_values(2)
+
+colors = ['midnightblue','Blue','Red','Blue','Red'] #,'c','m','y','b']
+styles=['-','-','-','--','--']
+alpha=0.18
+x_pos=[0.0512,0.025,]
+
+zorders ={'Baseline Cluster':3,
+			'Robust Cluster':2,
+			'Overfit Cluster':1
+			}
+
+fig,ax = plt.subplots(1,2,sharex=True,sharey=True,squeeze=True,figsize=(12,8))
+for i,cat in enumerate(df_sens['Category'].unique()[0:2]):
+	data_plot = df_cdf[df_cdf['Category'] == cat]
+	a = ax.flat[i]
+	baseline = data_plot[data_plot['Cluster'] == 'Baseline Cluster']['Bins'].values
+	for j,clust in enumerate(col_list):
+		# if clust in ['Robust Difference','Overfit Difference']:
+		# 	continue
+		x = data_plot[data_plot['Cluster'] == clust]['CDF'].values
+		y = data_plot[data_plot['Cluster'] == clust]['Bins'].values
+		label = clust if j in [0,1,2] else clust +' from Baseline'
+		a.plot(x,y,color=colors[j],linestyle=styles[j],linewidth=2,label=label,zorder=zorders[clust])
+		a.set_title(cat,)
+		a.set_xlim(0,1)
+		a.set_ylim(0,1)
+		a.set_aspect('equal')
+		# a.spines['right'].set_visible(False)
+		# a.spines['top'].set_visible(False)
+		# a.spines['left'].set_visible(False)
+		# a.spines['bottom'].set_visible(False)
+		# if clust in df_plot['Cluster'].unique():
+		# 	if clust in ['Good Cluster','Overfit Cluster']:
+		# 		ymin = df_plot.loc[(df_plot['Category'] == cat) & (df_plot['Cluster'] == clust),'Average Sensitivity'].values
+		# 		ymax = df_plot.loc[(df_plot['Category'] == cat) & (df_plot['Cluster'] == 'Baseline Cluster'),'Average Sensitivity'].values
+		# 		if ymin > ymax:
+		# 			ymin,ymax = ymax,ymin
+		# 		a.axvline(x=x_pos[j-1],ymin=ymin,
+		# 			ymax=ymax,color=colors[j],linewidth=3,zorder=10)
+		# 		a.plot(x_pos[j-1],df_plot.loc[(df_plot['Category'] == cat) & (df_plot['Cluster'] == clust),'Average Sensitivity'],
+		# 			marker='_',markersize=16,markeredgewidth=3,color=colors[j],linewidth=2,zorder=10,label= clust + ' Average Sensitivity')
+		# 	else:
+		# 		a.plot(0.025,df_plot.loc[(df_plot['Category'] == cat) & (df_plot['Cluster'] == clust),'Average Sensitivity'],
+		# 			marker='_',markersize=40,markeredgewidth=3,color=colors[j],linewidth=2,zorder=11,label='Baseline Average Sensitivity')
+	# fill between
+	# a.fill_betweenx(y,0,data_plot[data_plot['Cluster'] == 'Good Difference']['CDF'].values,color=colors[1],alpha=alpha)
+	# a.fill_betweenx(y,0,data_plot[data_plot['Cluster'] == 'Overfit Difference']['CDF'].values,color=colors[2],alpha=alpha)
+	# a.fill_betweenx(y,data_plot[data_plot['Cluster'] == 'Baseline Cluster']['CDF'].values,
+	# 	data_plot[data_plot['Cluster'] == 'Good Cluster']['CDF'].values,color=colors[1],alpha=alpha)
+	# a.fill_betweenx(y,data_plot[data_plot['Cluster'] == 'Baseline Cluster']['CDF'].values,
+	# 	data_plot[data_plot['Cluster'] == 'Overfit Cluster']['CDF'].values,color=colors[2],alpha=alpha)
+fig.tight_layout(pad=2.0)
+handles, labels = ax[0].get_legend_handles_labels()
+# handles[1] = Line2D([0], [0], color=colors[0], lw=4,solid_capstyle='butt')
+# handles[3] = Line2D([0], [0], color=colors[1], lw=4,solid_capstyle='butt')
+# handles[5] = Line2D([0], [0], color=colors[2], lw=4,solid_capstyle='butt')
+# add a big axis, hide frame
+with sns.axes_style("white"):
+	fig.add_subplot(111, frameon=False)
+plt.figlegend(handles=[handles[i] for i in [0,]],labels=[labels[i] for i in [0,]],bbox_to_anchor=(0.5, 0.05),frameon=False,loc='center',)
+plt.figlegend(handles=[handles[i] for i in [1,]],labels=[labels[i] for i in [1,]],bbox_to_anchor=(0.25, 0.05),frameon=False,loc='center', )
+plt.figlegend(handles=[handles[i] for i in [2,]],labels=[labels[i] for i in [2,]],bbox_to_anchor=(0.75, 0.05),frameon=False,loc='center', )
+# hide tick and tick label of the big axis
+plt.tick_params(labelcolor='none', top=False, bottom=False, left=False, right=False)
+fig.text(0.5, 0.1,'Non-Exceedance Probability',ha='center', )	
+fig.text(0.0, 0.5,'Total-Order Sensitivity Index',va='center', rotation='vertical', )
+plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.1, hspace=0.1)
+plt.savefig('cdf_trees_nodiff.png',format='png',bbox_inches='tight',dpi=600,transparent=True)
