@@ -1,17 +1,17 @@
 # symbolic_experiments
-Repository for symbolic regression/classification experiments.
+Repository for symbolic regression/classification experiments. The experiment files are `sc.py` and `sr.py`, run on a SLURM cluster using `sbatch sr.sh`. The number of trials are specified using a job array index in the shell scripts, and SLURM will schedule these sequentially. Other scripts within the experiment directories are provided to collect and analyze model results.
 
 ## Running locally -
 
 Download data set from here:  
 
-Code will look for this file (`'sym_data_4.csv'`) alongside repository (into same directory where you downloaded symbolic_experiments)
+Code will look for this file (`'sym_data_4.csv'`) alongside repository (in same directory that `symbolic_experiments` is in).
 
 Run the following line from the same directory as `sc.py` or `sr.py`, and scoop will automatically collect available processors to distribute model evaluations over. You can watch this happen in your system's task manager.  
 
-`python -m scoop sc.py [1]`  
+`python -m scoop sc.py 1`  
 
-The integer provided as an argument will be used to initialize random processes and label the trial.
+The integer provided as an argument at the end (the job index in the cluster version) will be used to initialize random processes, do training-test splits, and label the trial folder and results files.
 
 ## Dependencies and versions:
 ### For experiments:
