@@ -10,16 +10,16 @@ Run the following line from the same directory as `sc.py` or `sr.py`, and scoop 
 
 ## Dependencies and versions:
 
-`deap                      1.2.2
-matplotlib                3.1.0
-numpy                     1.16.1
-pandas                    0.25.3
-pygraphviz                1.3
-python                    3.7.1
-salib                     1.3.8
-scikit-learn              0.20.2
-scipy                     1.2.0
-scoop                     0.7.1.1
-seaborn                   0.9.0`
+`deap                     1.2.2`
+`matplotlib                3.1.0`
+`numpy                     1.16.1`
+`pandas                    0.25.3`
+`pygraphviz                1.3`
+`python                    3.7.1`
+`salib                     1.3.8`
+`scikit-learn              0.20.2`
+`scipy                     1.2.0`
+`scoop                     0.7.1.1`
+`seaborn                   0.9.0`
 
 Remote installations of python may not have plotting, so can turn these off in `sr.py` and `sc.py`. All results are stored in a pickle within a directory labeled with the trial number.
