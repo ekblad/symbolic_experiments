@@ -18,7 +18,7 @@ Required:
 `pandas                    0.25.3`   
 `scipy                     1.2.0`  
 `deap                     1.2.2`  
-`scoop                     0.7.1.1`  
+`scoop                     0.7.1.1`(as written, can be modified to run single processor)  
 
 Optional (for immediate plotting of results):  
 `matplotlib                3.1.0`  
