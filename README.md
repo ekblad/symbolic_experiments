@@ -3,23 +3,36 @@ Repository for symbolic regression/classification experiments.
 
 ## Running locally -
 
-Download data set from here:
+Download data set from here:  
+
 Code will look for this file (`'sym_data_4.csv'`) alongside repository (into same directory where you downloaded symbolic_experiments)
 
 Run the following line from the same directory as `sc.py` or `sr.py`, and scoop will automatically collect available processors to distribute model evaluations over. You can watch this happen in your system's task manager.
 
 ## Dependencies and versions:
+### For experiments:
 
-`deap                     1.2.2`
-`matplotlib                3.1.0`
-`numpy                     1.16.1`
-`pandas                    0.25.3`
-`pygraphviz                1.3`
-`python                    3.7.1`
-`salib                     1.3.8`
-`scikit-learn              0.20.2`
-`scipy                     1.2.0`
+Required:
+`python                    3.7.1` 
+`numpy                     1.16.1`  
+`pandas                    0.25.3` 
+`scipy                     1.2.0` 
+`deap                     1.2.2` 
 `scoop                     0.7.1.1`
-`seaborn                   0.9.0`
+
+Optional (for immediate plotting of results):
+`matplotlib                3.1.0`  
+`pygraphviz                1.3`  
+`scikit-learn              0.20.2` 
+ 
+ ### For sensitivity testing, clustering, and most figures:
+`salib                     1.3.8`  
+`scikit-learn              0.20.2` 
+`matplotlib                3.1.0`  
+`seaborn                   0.9.0`  
+
+### For maps and networks:
+
+`pygraphviz                1.3`  
 
 Remote installations of python may not have plotting, so can turn these off in `sr.py` and `sc.py`. All results are stored in a pickle within a directory labeled with the trial number.
