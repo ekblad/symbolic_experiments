@@ -1,0 +1,45 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{forest}
+
+\usetikzlibrary{trees}
+\usetikzlibrary{shapes}
+%\usetikzlibrary{graphs,graphdrawing}
+%\usegdlibrary{trees}
+\begin{document}
+{\Huge
+\begin{forest}
+for tree={
+  draw,
+  s sep=5mm
+}
+[argmax,circle
+	[Negative,ellipse,l=-10mm, anchor=north
+		[$Multiply$,ellipse
+			[Tree Acreage CN0L1,rectangle]
+			[$Cosine$,ellipse
+				[Rice Pumping SN1L4,rectangle]
+			]
+		]
+	]
+
+  
+	[No Change,ellipse,l=20mm, anchor=base
+		[$Divide$,ellipse
+			[$Subtract$,ellipse
+				[Refuge Delivery SN0L4,rectangle,l=15mm, anchor=north]
+				[Refuge Delivery SN1L3,rectangle,l=15mm, anchor=north]
+			]  
+			[Tree Acreage CN0L1,rectangle,l=15mm, anchor=north]
+		]
+	]
+ 
+	[Positive,ellipse,l=-10mm, anchor=north
+		[$Negate$,ellipse
+			[Refuge Pumping SN4L1,rectangle,l=1mm, anchor=north]
+		]
+	]
+]
+  
+\end{forest}
+}
+\end{document}

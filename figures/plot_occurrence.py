@@ -27,9 +27,9 @@ def main():
 	occu.index = [val if val[6] is not '_' else val[:6] + val[7:] for val in occu.index.values] # oops, used two naming conventions
 	occu['cluster'] = [sens.loc[((sens['model_id']==i) & (sens['experiment']=='classification')),'cluster'].values[0] for i in occu.index.values]
 
-	clust_list = ['Robust Cluster','Overfit Cluster','Baseline Cluster',]
-	occu = occu[[True if i in [0,1,2] else False for i in occu['cluster'].values]]
-	occu['Cluster'] = [clust_list[i] for i in occu['cluster']]
+	clust_list = ['Dominated Cluster','Overfit Cluster','Parsimonious Cluster',]
+	occu = occu[[True if i in [1,2,3] else False for i in occu['cluster'].values]]
+	occu['Cluster'] = [clust_list[i-1] for i in occu['cluster']]
 	occu = occu.drop(['training_error', 'complexity', 'test_error','cluster'],axis=1)
 	occu[occu.columns[:-1]] = occu[occu.columns[:-1]] > 0
 	occu = occu.groupby(['Cluster']).sum()
@@ -59,13 +59,13 @@ def main():
 		'lag':['present','lag1','lag2','lag3','lag4','lag5','lag6'],
 		'function':['Addition','Subtraction','Multiplication','Division','Negative','Sine','Cosine','Less Than','If-Then-Else'],
 		'Category':['Tree Acreage','Non-Tree Acreage','Tree Prices/Values','Non-Tree Prices/Values','Water Deliveries','Water Pumping'],
-		'Cluster':['Baseline Cluster','Overfit Cluster','Robust Cluster'],
+		'Cluster':['Parsimonious Cluster','Dominated Cluster','Overfit Cluster'],
 		# 'color':['midnightblue','Red']
 		}
 
 	colors = ['midnightblue','Red','Blue'] #,'c','m','y','b']
 
-	fig, axes = plt.subplots(1,2,figsize=(8,5))
+	fig, axes = plt.subplots(1,2,figsize=(8,6))
 
 
 	g2 = sns.boxplot(x='Occurrence', 
@@ -130,7 +130,7 @@ def main():
 
 	# plt.tight_layout()
 	plt.subplots_adjust(wspace=0.05)
-	fig.savefig('plot_occurrence.jpg',format='jpg',bbox_inches='tight',dpi=600,transparent=True)
+	fig.savefig('plot_occurrence.pdf',format='pdf',bbox_inches='tight',dpi=600,transparent=True)
 
 from matplotlib.patches import PathPatch
 

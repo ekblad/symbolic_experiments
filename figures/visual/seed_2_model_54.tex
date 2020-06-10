@@ -1,0 +1,50 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{forest}
+
+\usetikzlibrary{trees}
+\usetikzlibrary{shapes}
+%\usetikzlibrary{graphs,graphdrawing}
+%\usegdlibrary{trees}
+\begin{document}
+{\Huge
+\begin{forest}
+for tree={
+  draw,
+  s sep=5mm
+}
+[argmax,circle
+  [Negative,ellipse
+  [$Sine$,ellipse
+  [Urban~Delivery~SN1L3,rectangle]]]
+  [No Change,ellipse
+  [$Cosine$,ellipse
+  [Tree Acreage~CN0L1,rectangle]]]
+  [Positive,ellipse
+  [$Cosine$,ellipse
+  [Urban~Delivery~SN4L4,rectangle]]]  
+  ]
+]
+\end{forest}
+}
+%\begin{tikzpicture}[
+%  every node/.style={draw,align=center}, 
+%  node distance=70mm, 
+%  level 1/.style={sibling distance =30 mm}, 
+%  level 2/.style={sibling distance =30 mm}, 
+%  level 3/.style={sibling distance =30 mm}
+%]
+%\node [circle,draw] (z){$argmax$}
+% child [grow=down] {node [ellipse,draw] (a) {$Negative$}
+%  child [grow=down] {node [ellipse,draw] {$Sine$}
+%   child [grow=down] {node[rectangle,draw] {$Urban~Delivery~SN1L3$}}}}
+% child [grow=down] {node [ellipse,draw] (b) {$No~Change$}
+%   child [grow=down] {node [ellipse,draw] {$Cosine$}
+%    child [grow=down] {node[rectangle,draw] {$Tree Acreage~CN0L1$}}}}
+% child [grow=down] {node [ellipse,draw] (c) {$Positive$}
+%   child [grow=down] {node [ellipse,draw] {$Cosine$}
+%    child [grow=down] {node[rectangle,draw] {$Urban~Delivery~SN4L4$}}}}
+%
+%;
+%\end{tikzpicture}
+
+\end{document}
