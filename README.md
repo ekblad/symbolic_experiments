@@ -1,4 +1,5 @@
-# symbolic_experiments
+# symbolic_experiments  
+[![DOI](https://zenodo.org/badge/234428461.svg)](https://zenodo.org/badge/latestdoi/234428461)   
 Repository for symbolic regression/classification experiments. The experiment files are `sc.py` and `sr.py`, run on a SLURM cluster using `sbatch sr.sh`. The number of trials are specified using a job array index in the shell scripts, and SLURM will schedule these sequentially. Other scripts within the experiment directories are provided to collect and analyze model results.
 
 ## Running locally -
