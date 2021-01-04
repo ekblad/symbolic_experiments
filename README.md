@@ -4,7 +4,7 @@ Repository for symbolic regression/classification experiments. The experiment fi
 
 ## Running locally -
 
-Download data set from here: [Google Drive link](https://drive.google.com/file/d/1no0n1hRs1ghTh7eG39hkUMV0q6O22FKx/view?usp=sharing)
+Download data set from here: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4360593.svg)](https://doi.org/10.5281/zenodo.4360593)
 
 Code will look for this file (`'sym_data_4.csv'`) alongside repository (in same directory that `symbolic_experiments` is in).
 
@@ -46,7 +46,5 @@ Optional*(for immediate plotting of results):
 
 The code that extracts the IWFM water pumping and delivery estimates from C2VSim can be found [here](https://github.com/giorgk/C2Vsim_FG_v2/tree/master/NSF_Liam).  
 
-The code that extracts the land use data from the California Pesticide Use Reports can be found [here](https://github.com/nataliemall/crop_acreages_from_DPR_reports).  
-
-The code that extracts the economic data from the California County Commissioner Reports can be found [here]().  
+The code that extracts the land use data from the California Pesticide Use Reports can be found [here](https://github.com/nataliemall/crop_acreages_from_DPR_reports).   
 
