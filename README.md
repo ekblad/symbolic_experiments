@@ -48,3 +48,4 @@ The code that extracts the IWFM water pumping and delivery estimates from C2VSim
 
 The code that extracts the land use data from the California Pesticide Use Reports can be found [here](https://github.com/nataliemall/crop_acreages_from_DPR_reports).   
 
+The California County Ag Commissioner data (economic) can be found [here](https://www.nass.usda.gov/Statistics_by_State/California/Publications/AgComm/index.php).
